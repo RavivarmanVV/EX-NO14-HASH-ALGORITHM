@@ -31,30 +31,56 @@ To implement HASH ALGORITHM
 #include <stdio.h>
 #include <string.h>
 
-unsigned int simple_hash(const char *message) {
-unsigned int hash = 0;
-int i;
-for (i = 0; i < strlen(message); i++) {
-hash = (hash * 31) + message[i];
-}
-return hash;
-}
-int main() {
-char message[256];
-unsigned int hash_value;
 
-printf("Enter the message to hash: ");
-fgets(message, sizeof(message), stdin);
-message[strcspn(message, "\n")] = '\0'; 
-hash_value = simple_hash(message);
-printf("Generated hash value: %u\n", hash_value);
-return 0;
+void computeSimpleHash(const char *message, unsigned char *hash) {
+    unsigned char temp = 0;
+
+    
+    for (int i = 0; message[i] != '\0'; i++) {
+        temp = temp ^ message[i];  
+        temp += message[i];        
+    }
+    
+    
+    *hash = temp;
 }
+
+int main() {
+    char message[256];      
+    unsigned char hash;     
+    char receivedHash[3];   
+
+   
+    printf("Enter the message: ");
+    scanf("%s", message);
+
+   
+    computeSimpleHash(message, &hash);
+
+   
+    printf("Computed Hash (in hex): %02x\n", hash);
+
+    
+    printf("Enter the received hash (in hex): ");
+    scanf("%s", receivedHash);
+
+    unsigned int receivedHashValue;
+    sscanf(receivedHash, "%02x", &receivedHashValue);
+
+    
+    if (hash == receivedHashValue) {
+        printf("Hash verification successful. Message is unchanged.\n");
+    } else {
+        printf("Hash verification failed. Message has been altered.\n");
+    }
+
+    return 0;
+}
+
 ```
 
 ## Output:
-<img width="988" height="620" alt="image" src="https://github.com/user-attachments/assets/50325e8b-b7f2-4950-af20-153b49143ab1" />
-
+<img width="1917" height="763" alt="image" src="https://github.com/user-attachments/assets/f75b2203-2ec4-4394-85b4-cad22541b657" />
 
 ## Result:
 The program is executed successfully.
